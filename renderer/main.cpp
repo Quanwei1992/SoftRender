@@ -10,7 +10,7 @@ int main(int argc, char** argv)
 	{
 		window->PollEvents();
 		device.Clear();
-		device.DrawPixel(10, 10, 0xff0000);
+		device.DrawLine(10, 10,100,100, 0xff0000);
 		window->SwapBuffer();
 		Sleep(1);
 	}
