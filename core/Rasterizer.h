@@ -28,7 +28,7 @@ class Rasterizer
 public:
 	Rasterizer(int width, int height);
 	void SetPositions (const std::vector<Eigen::Vector3f>& positions);
-	void SetIndices(const std::vector<Eigen::Vector3i>& indices);
+	void SetIndices(const std::vector<unsigned int>& indices);
 
 	void SetModel(const Eigen::Matrix4f& m);
 	void SetView(const Eigen::Matrix4f& m);
@@ -55,7 +55,7 @@ private:
 	Eigen::Matrix4f _projection;
 
 	std::vector<Eigen::Vector3f> _positions;
-	std::vector<Eigen::Vector3i> _indices;
+	std::vector<unsigned int> _indices;
 
 	std::vector<Eigen::Vector3f> _framebuf;
 	std::vector<float> _depthbuf;

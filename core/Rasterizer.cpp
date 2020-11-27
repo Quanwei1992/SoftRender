@@ -19,7 +19,7 @@ void Rasterizer::SetPositions(const std::vector<Eigen::Vector3f>& positions)
 	_positions = positions;
 }
 
-void Rasterizer::SetIndices(const std::vector<Eigen::Vector3i>& indices)
+void Rasterizer::SetIndices(const std::vector<unsigned int>& indices)
 {
 	_indices = indices;
 }
@@ -63,13 +63,13 @@ auto to_vec4(const Eigen::Vector3f& v3, float w = 1.0f)
 void Rasterizer::Draw(EPrimitive type)
 {
 	Matrix4f mvp = _projection * _view * _model;
-	for (auto& index : _indices)
+	for (int i =0;i<_indices.size();i+=3)
 	{
 		// to clip space
 		Vector4f v[] = {
-			mvp * to_vec4(_positions[index[0]]),
-			mvp * to_vec4(_positions[index[1]]),
-			mvp * to_vec4(_positions[index[2]])
+			mvp * to_vec4(_positions[_indices[i]]),
+			mvp * to_vec4(_positions[_indices[i+1]]),
+			mvp * to_vec4(_positions[_indices[i+2]])
 		};
 
 		// to NDC space
@@ -79,7 +79,7 @@ void Rasterizer::Draw(EPrimitive type)
 		}
 
 		// to screen space
-		for (auto & vert : v)
+		for (auto& vert : v)
 		{
 			vert.x() = (vert.x() + 1) * 0.5f * _width;
 			vert.y() = (vert.y() + 1) * 0.5f * _height;
