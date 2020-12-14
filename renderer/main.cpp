@@ -32,8 +32,7 @@ public:
 	PSOut Main(const PSIn& in) override
 	{
 		PSOut out;
-
-		out.FragColor = Vector4f(1,0,0,1);
+		out.FragColor = in.Color;
 		return out;
 	}
 };
@@ -46,10 +45,14 @@ int main(int argc, char** argv)
 	if (!window) return -1;
 	RenderDevice device(window);
 	
-	std::vector<float> vertices = {
-	-0.5f, -0.5f, 0.0f,
-	 0.5f, -0.5f, 0.0f,
-	 0.0f,  0.5f, 0.0f
+	Vertex v = {
+		{-0.5f, -0.5f,.0f},{1.0f,.0f,.0f,1.0f}
+	};
+
+	std::vector<Vertex> vertices = {
+		{{-0.5f, -0.5f, 0.0f},{1.0f,.0f,.0f,1.0f }},
+		{{0.5f, -0.5f, 0.0f} ,{0.0f,1.0f,.0f,1.0f }},
+		{{0.0f,  0.5f, 0.0f} ,{0.0f,.0f,1.0f,1.0f }}
 	};
 
 	std::vector<uint32_t> indices{
@@ -69,7 +72,7 @@ int main(int argc, char** argv)
 	{
 		window->PollEvents();
 		device.Clear();
-		device.Draw(EPrimitive::LINE_STRIP);
+		device.Draw(EPrimitive::TRIANGLES);
 		window->SwapBuffer();
 		Sleep(1);
 	}

@@ -3,16 +3,16 @@
 
 struct VSOut
 {
-	Eigen::Vector3f Position;
+	Eigen::Vector4f Position;
 };
 
 struct VSIn
 {
-	Eigen::Vector3f Position;
+	Eigen::Vector4f Position;
 };
 
 struct PSIn {
-	Eigen::Vector3f Position;
+	Eigen::Vector4f Color;
 };
 
 struct PSOut {
