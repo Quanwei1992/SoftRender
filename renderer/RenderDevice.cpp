@@ -256,38 +256,6 @@ void RenderDevice::DrawTriangles()
 			_vertices[_indices[i+2]]
 		);
 	}
-
-
-	std::vector<VSIn> vsin(3);
-	std::vector<VSOut> vsout(3);
-	PSIn psin;
-	for (size_t i = 0; i < _vertices.size(); i += 3)
-	{
-		vsin[0].Position = toVec4(_vertices[i].Position);
-		vsin[1].Position = toVec4(_vertices[i+1].Position);
-		vsin[2].Position = toVec4(_vertices[i+2].Position);
-
-		for (int j = 0; j < 3; j++)
-		{
-			vsout[j] = _vertexShader->Main(vsin[j]);
-		}
-
-		if (checkCVV(vsout[0].Position) != 0) continue;
-		// º∆À„AABB
-		float minx, miny, maxx, maxy;
-		minx = miny = FLT_MIN;
-		maxx = maxy = FLT_MAX;
-
-		for (int j =0;j<3;j++)
-		{
-			vsout[j].Position = vsout[j].Position / vsout[j].Position.w();
-			const auto& pos = vsout[j].Position;
-			if (pos.x() < minx) minx = pos.x();
-			if (pos.x() > maxx) maxx = pos.x();
-			if (pos.y() < miny) miny = pos.y();
-			if (pos.y() > maxy) maxy = pos.y();
-		}
-	}
 }
 
 void RenderDevice::DrawPoints()
