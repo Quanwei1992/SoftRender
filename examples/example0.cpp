@@ -3,17 +3,31 @@
 #include "Eigen3/Eigen"
 #include <cmath>
 #include <random>
+#include <ctime>
 using namespace Eigen;
 
 class DefaultVertexShader : public IVertexShader
 {
 public:
+	DefaultVertexShader()
+	{
+		_mvp = Matrix4f::Identity();
+	}
 	VSOut Main(const VSIn& in) override
 	{
 		VSOut out;
-		out.Position = in.Position;
+		out.Position = _mvp * in.Position;
 		return out;
 	}
+
+public:
+	void SetMVP(const Matrix4f mvp)
+	{
+		_mvp = mvp;
+	}
+
+private:
+	Matrix4f _mvp;
 };
 
 inline float get_random_float()
@@ -41,7 +55,7 @@ public:
 
 int main(int argc, char** argv)
 {
-	Window* window = Window::Create(800, 600, "SoftRender");
+	Window* window = Window::Create(800, 600, "Example 0");
 	if (!window) return -1;
 	RenderDevice device(window);
 	
@@ -68,11 +82,15 @@ int main(int argc, char** argv)
 	device.SetFragmentShader(&ps);
 	
 
+
 	while (!window->ShouldClose())
 	{
 		window->PollEvents();
 		device.Clear();
+		clock_t t = clock();
 		device.Draw(EPrimitive::TRIANGLES);
+		clock_t e = clock() - t;
+		double sec = (double)e / CLOCKS_PER_SEC;
 		window->SwapBuffer();
 		Sleep(1);
 	}

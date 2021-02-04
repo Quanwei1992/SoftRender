@@ -18,6 +18,7 @@ struct Vertex
 {
 	Eigen::Vector3f Position;
 	Eigen::Vector4f Color;
+	Eigen::Vector2f Texcoords;
 };
 
 
@@ -35,7 +36,6 @@ public:
 private:
 	void DrawPixel(int x, int y, const Eigen::Vector4f& color);
 	void DrawPixel(const Eigen::Vector4f& screenPos, const Eigen::Vector4f& color);
-	void DrawLine(const Eigen::Vector4f& from, const Eigen::Vector4f& to);
 	void DrawLine(float x0, float y0, float x1, float y1);
 	Eigen::Vector4f ViewportTransform(const Eigen::Vector4f& in);
 	Eigen::Vector4f InvViewportTransform(const Eigen::Vector4f& in);

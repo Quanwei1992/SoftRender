@@ -322,6 +322,9 @@ inline Vector3f barycentric(float x, float y, const std::vector<Vector4f>& v)
 
 
 
+
+
+
 inline Vector3f interpolate(const Vector3f& barycentric, const Vector3f& a, const Vector3f& b, const Vector3f& c)
 {
 	return a * barycentric.x() + b * barycentric.y() + c * barycentric.z();
@@ -387,6 +390,7 @@ void RenderDevice::DrawTriangle(const Vertex& v1, const Vertex& v2, const Vertex
 			}
 			const Vector3f& b = barycentric(x + 0.5f, y + 0.5f, points);
 			//psin.Position = interpolate(b, vsout.pos, p2, p3);
+			psin.Texcoords = interpolate(b, v1.Texcoords, v2.Texcoords, v3.Texcoords);
 			psin.Color = interpolate(b, v1.Color, v2.Color, v3.Color);
 			const auto& psout = _fragmentShader->Main(psin);
 			DrawPixel(x, y,psout.FragColor);

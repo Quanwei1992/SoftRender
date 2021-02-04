@@ -1,6 +1,7 @@
 #pragma once
 #include "Eigen3/Eigen"
 
+
 struct VSOut
 {
 	Eigen::Vector4f Position;
@@ -13,6 +14,8 @@ struct VSIn
 
 struct PSIn {
 	Eigen::Vector4f Color;
+	Eigen::Vector2f Texcoords;
+
 };
 
 struct PSOut {
