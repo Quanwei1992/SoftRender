@@ -7,30 +7,13 @@ project(SoftRender)
 
 add_subdirectory(third_part/glm)
 add_subdirectory(third_part/stb)
+add_subdirectory(third_part/glfw)
+
+SET_TARGET_PROPERTIES (glfw PROPERTIES FOLDER ThirdPart)
+SET_TARGET_PROPERTIES (stb PROPERTIES FOLDER ThirdPart)
 
 
-
-ucm_add_dirs(math platform renderer TO sources)
-add_library(Core STATIC ${sources})
-target_include_directories(Core PUBLIC ${CMAKE_HOME_DIRECTORY}
-                                        ${CMAKE_HOME_DIRECTORY}/third_part 
-                                        ${CMAKE_HOME_DIRECTORY}/math
-                                        ${CMAKE_HOME_DIRECTORY}/platform
-                                        ${CMAKE_HOME_DIRECTORY}/renderer
-)
-
-target_link_libraries(Core PUBLIC glm)
-target_compile_definitions(Core PUBLIC GLM_FORCE_SWIZZLE)
-
-add_executable(EXAMPLE0 examples/example0.cpp)
-target_link_libraries(EXAMPLE0 PRIVATE Core)
-
-
-add_executable(EXAMPLE1 examples/example1.cpp)
-target_link_libraries(EXAMPLE1 PRIVATE Core stb)
-
-
-
-install(TARGETS EXAMPLE0 EXAMPLE1 DESTINATION ${CMAKE_HOME_DIRECTORY}/output)
+add_subdirectory(renderer)
+add_subdirectory(examples/01_Creating_a_window)
 
 install(DIRECTORY data DESTINATION ${CMAKE_HOME_DIRECTORY}/output)
