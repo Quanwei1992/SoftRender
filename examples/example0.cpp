@@ -1,17 +1,17 @@
 #include "platform/window.h"
 #include "RenderDevice.h"
-#include "Eigen3/Eigen"
+#include <glm/glm.hpp>
+#include <glm/ext/matrix_transform.hpp>
 #include <cmath>
 #include <random>
 #include <ctime>
-using namespace Eigen;
 
 class DefaultVertexShader : public IVertexShader
 {
 public:
 	DefaultVertexShader()
 	{
-		_mvp = Matrix4f::Identity();
+		_mvp = glm::identity<glm::mat4>();
 	}
 	VSOut Main(const VSIn& in) override
 	{
@@ -21,13 +21,13 @@ public:
 	}
 
 public:
-	void SetMVP(const Matrix4f mvp)
+	void SetMVP(const glm::mat4& mvp)
 	{
 		_mvp = mvp;
 	}
 
 private:
-	Matrix4f _mvp;
+	glm::mat4 _mvp;
 };
 
 inline float get_random_float()

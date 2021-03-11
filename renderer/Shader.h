@@ -1,25 +1,24 @@
 #pragma once
-#include "Eigen3/Eigen"
-
+#include <glm/glm.hpp>
 
 struct VSOut
 {
-	Eigen::Vector4f Position;
+	glm::vec4 Position;
 };
 
 struct VSIn
 {
-	Eigen::Vector4f Position;
+	glm::vec4 Position;
 };
 
 struct PSIn {
-	Eigen::Vector4f Color;
-	Eigen::Vector2f Texcoords;
+	glm::vec4 Color;
+	glm::vec2 Texcoords;
 
 };
 
 struct PSOut {
-	Eigen::Vector4f FragColor;
+	glm::vec4 FragColor;
 };
 
 

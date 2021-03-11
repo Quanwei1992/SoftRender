@@ -2,20 +2,18 @@
 #include "RenderDevice.h"
 #include "Sampler2D.h"
 #include "Texture.h"
-#include "Eigen3/Eigen"
-#define STB_IMAGE_IMPLEMENTATION
+#include <glm/glm.hpp>
+#include <glm/ext/matrix_transform.hpp>
 #include "stb/stb_image.h"
 #include <cmath>
 #include <random>
 #include <ctime>
-using namespace Eigen;
-
 class DefaultVertexShader : public IVertexShader
 {
 public:
 	DefaultVertexShader()
 	{
-		_mvp = Matrix4f::Identity();
+		_mvp = glm::identity<glm::mat4>();
 	}
 	VSOut Main(const VSIn& in) override
 	{
@@ -25,13 +23,13 @@ public:
 	}
 
 public:
-	void SetMVP(const Matrix4f mvp)
+	void SetMVP(const glm::mat4& mvp)
 	{
 		_mvp = mvp;
 	}
 
 private:
-	Matrix4f _mvp;
+	glm::mat4  _mvp;
 };
 
 inline float get_random_float()

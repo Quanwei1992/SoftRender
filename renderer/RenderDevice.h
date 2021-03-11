@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "Shader.h"
-
+#include <glm/glm.hpp>
 class Window;
 class IVertexShader;
 
@@ -16,9 +16,9 @@ enum class EPrimitive {
 
 struct Vertex
 {
-	Eigen::Vector3f Position;
-	Eigen::Vector4f Color;
-	Eigen::Vector2f Texcoords;
+	glm::vec3 Position;
+	glm::vec4 Color;
+	glm::vec2 Texcoords;
 };
 
 
@@ -34,11 +34,11 @@ public:
 	void SetFragmentShader(IFragmentShader* shader);
 	void Draw(EPrimitive type);
 private:
-	void DrawPixel(int x, int y, const Eigen::Vector4f& color);
-	void DrawPixel(const Eigen::Vector4f& screenPos, const Eigen::Vector4f& color);
+	void DrawPixel(int x, int y, const glm::vec4& color);
+	void DrawPixel(const glm::vec4& screenPos, const glm::vec4& color);
 	void DrawLine(float x0, float y0, float x1, float y1);
-	Eigen::Vector4f ViewportTransform(const Eigen::Vector4f& in);
-	Eigen::Vector4f InvViewportTransform(const Eigen::Vector4f& in);
+	glm::vec4 ViewportTransform(const glm::vec4& in);
+	glm::vec4 InvViewportTransform(const glm::vec4& in);
 
 	void DrawLineStrip();
 	void DrawTriangles();
