@@ -15,5 +15,6 @@ SET_TARGET_PROPERTIES (stb PROPERTIES FOLDER ThirdPart)
 
 add_subdirectory(renderer)
 add_subdirectory(examples/01_Creating_a_window)
+add_subdirectory(examples/02_Hello_Triangle)
 
 install(DIRECTORY data DESTINATION ${CMAKE_HOME_DIRECTORY}/output)
