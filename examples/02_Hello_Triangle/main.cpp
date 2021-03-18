@@ -34,7 +34,7 @@ public:
 class _fragment_shader : public renderer::fragment_shader
 {
 public:
-	void main() override
+	void main() const override
 	{
 		out_frag_color = glm::vec4(1.0f, 0.5f, 0.2f, 1.0f);
 	}
@@ -71,6 +71,7 @@ int main(int argc, const char** argv)
 	 0.5f, -0.5f, 0.0f,
 	 0.0f,  0.5f, 0.0f
 	};
+
 
 
 	array_buffer* vbo = create_array_buffer();

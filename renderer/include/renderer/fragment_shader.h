@@ -5,9 +5,9 @@ namespace renderer
 	class fragment_shader
 	{
 	public:
-		virtual void main() = 0;
+		virtual void main() const = 0;
 
 	public:
-		glm::vec4 out_frag_color;
+		mutable glm::vec4 out_frag_color;
 	};
 }
