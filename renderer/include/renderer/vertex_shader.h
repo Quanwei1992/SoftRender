@@ -1,10 +1,12 @@
 #pragma once
 #include "data_types.h"
+#include "shader.h"
 #include "glm/glm.hpp"
 #include <vector>
 namespace renderer
 {
 
+	class render_device_impl;
 
 	struct input_vertex_arrtibute
 	{
@@ -20,14 +22,14 @@ namespace renderer
 	public:
 		virtual void main() const = 0;
 
-	public:
-		int GetAttributesCount() const;
-		const input_vertex_arrtibute& GetAttribute(int index) const;
-
 	protected:
+		friend class render_device_impl;
 		std::vector<input_vertex_arrtibute> _attributes;
-
-	public:
+		std::vector<shader_varying_info> _varyings;
 		mutable glm::vec4 out_position;
 	};
+
 }
+
+#define VERTEX_IN_VEC3(location,name) _attributes.push_back(input_vertex_arrtibute{##location##,data_type::FLOAT,3,&##name##})
+#define VERTEX_OUT_VEC4(name) _varyings.push_back(shader_varying_info{#name,data_type::FLOAT,4,&##name## })

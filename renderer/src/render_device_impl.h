@@ -33,6 +33,8 @@ namespace renderer
 		render_context* _ctx;
 		glm::vec4 _clear_color;
 		std::vector<uint32_t*> _framebuffer;
+		const int VARYING_DATA_BUFFER_SIZE = 1024;
+		uint8_t* _varying_data_buffer;
 		const vertex_shader* _vertex_shader;
 		const fragment_shader* _fragment_shader;
 		const vertex_array* _vao;

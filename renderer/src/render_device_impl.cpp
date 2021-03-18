@@ -10,12 +10,21 @@
 using namespace renderer;
 using namespace glm;
 
+struct shader_varying_data
+{
+	const char* name;
+	data_type type;
+	int size;
+	uint8_t* data;
+};
+
 struct vertex
 {
 	vec4 pos;
 	float rhw;
 	vec2 spf;
 	ivec2 spi;
+	std::vector<shader_varying_data> varyings;
 };
 
 
@@ -25,9 +34,10 @@ render_device_impl::render_device_impl(render_context* ctx)
 	,_fragment_shader(nullptr)
 	,_vertex_shader(nullptr)
 	,_vao(nullptr)
+	,_varying_data_buffer(nullptr)
 {
 	assert(ctx != nullptr);
-
+	_varying_data_buffer = new uint8_t[VARYING_DATA_BUFFER_SIZE];
 	_framebuffer.resize(ctx->height);
 	for (int j = 0; j < ctx->height; j++)
 	{
@@ -39,6 +49,11 @@ render_device_impl::~render_device_impl()
 {
 	release_context(_ctx);
 	_ctx = nullptr;
+	if (_varying_data_buffer != nullptr)
+	{
+		delete[] _varying_data_buffer;
+		_varying_data_buffer = nullptr;
+	}
 }
 
 void render_device_impl::Clear(uint8_t mask)
@@ -153,10 +168,8 @@ bool renderer::render_device_impl::DrawTriangles(int index)
 	// initialize vertex
 	for (int i = 0; i < 3; i++)
 	{
-		int num_attr = _vertex_shader->GetAttributesCount();
-		for (int j = 0; j < num_attr; j++)
+		for (const input_vertex_arrtibute& ivr : _vertex_shader->_attributes)
 		{
-			const input_vertex_arrtibute& ivr = _vertex_shader->GetAttribute(j);
 			const vertex_attrib& vr = vao->GetVertexAttrib(ivr.location);
 			assert(vr.enable);
 			assert(vr.type == ivr.type);
@@ -168,6 +181,19 @@ bool renderer::render_device_impl::DrawTriangles(int index)
 		vertex& vertex = _vertex[i];
 		_vertex_shader->main();
 		vertex.pos = _vertex_shader->out_position;
+		uint8_t* varying_buffer_ptr = _varying_data_buffer;
+		for (const auto& varying_info : _vertex_shader->_varyings)
+		{
+			shader_varying_data svd;
+			svd.name = varying_info.name;
+			svd.type = varying_info.type;
+			svd.size = varying_info.size;
+			svd.data = varying_buffer_ptr;
+			int data_size = svd.size * get_size_by_data_type(svd.type);
+			memcpy(svd.data, varying_info.address, data_size);
+			varying_buffer_ptr += data_size;
+			vertex.varyings.push_back(svd);
+		}
 
 		// 简单裁剪，任何一个顶点超过 CVV 就剔除
 		float w = vertex.pos.w;
@@ -263,6 +289,17 @@ bool renderer::render_device_impl::DrawTriangles(int index)
 			if (E12 < (TopLeft12 ? 0 : 1)) continue;   // 在第二条边后面
 			if (E20 < (TopLeft20 ? 0 : 1)) continue;   // 在第三条边后面
 
+
+			for (const auto& out_varying : vtx[0]->varyings)
+			{
+				for (const auto& in_varying : _fragment_shader->_varyings)
+				{
+					if(strcmp(out_varying.name,in_varying.name) != 0) continue;
+					assert(out_varying.size == in_varying.size);
+					assert(out_varying.type == in_varying.type);
+					memcpy(in_varying.address, out_varying.data, out_varying.size* get_size_by_data_type(out_varying.type));
+				}
+			}
 
 			_fragment_shader->main();
 			SetPixel(cx, cy, _fragment_shader->out_frag_color);
